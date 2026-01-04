@@ -3,232 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mice ir Cigonciaus vestuvės</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Mice & Cigoncius – Kvietimas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --gold: #c9a56a;
-            --dark: #2b2b2b;
-            --bg: #fdfaf7;
+            --envelope-bg: #f3e9dc;
+            --paper-bg: #ffffff;
         }
 
         body {
             margin: 0;
-            background-color: var(--bg);
-            font-family: 'Inter', sans-serif;
-            color: var(--dark);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background: radial-gradient(circle, #fdfaf7 0%, #e8e1d5 100%);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
         }
 
-        /* Dekoratyvinės fono dėmės */
-        .bg-blob {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(201,165,106,0.1) 0%, rgba(255,255,255,0) 70%);
-            z-index: -1;
-            filter: blur(50px);
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.05);
-            padding: 60px 40px;
-            max-width: 600px;
-            width: 85%;
-            text-align: center;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .invite-label { 
-            letter-spacing: 0.4em; 
-            text-transform: uppercase; 
-            color: var(--gold); 
-            font-weight: 600; 
-            font-size: 12px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .names { 
-            font-family: 'Playfair Display', serif; 
-            font-size: clamp(32px, 8vw, 52px); 
-            margin: 0; 
-            font-weight: 700;
-            font-style: italic;
-        }
-
-        .ampersand {
-            color: var(--gold);
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            display: block;
-            margin: -10px 0;
-        }
-
-        h1 { 
-            font-family: 'Inter', sans-serif; 
-            font-size: 18px; 
-            margin: 20px 0; 
-            font-weight: 300; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .divider { 
-            width: 60px; 
-            height: 1px; 
-            background: var(--gold); 
-            margin: 30px auto; 
-        }
-
-        .info-grid {
-            display: flex;
-            justify-content: space-around;
-            margin: 40px 0;
-            gap: 20px;
-        }
-
-        .info-item h3 {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .info-item p {
-            margin: 0;
-            font-weight: 500;
-            font-size: 15px;
-        }
-
-        #countdown {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            margin: 30px 0;
-            color: var(--gold);
-        }
-
-        #playBtn {
-            background: var(--dark);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 1px;
+        /* VOKO KONSTRUKCIJA */
+        .envelope-wrapper {
+            position: relative;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        #playBtn:hover {
-            transform: scale(1.05);
-            background: var(--gold);
+        .envelope-wrapper:hover {
+            transform: translateY(-10px);
         }
 
-        footer { 
-            margin-top: 40px; 
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            opacity: 0.6; 
+        .envelope {
+            position: relative;
+            width: 350px;
+            height: 230px;
+            background: var(--envelope-bg);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        /* Voko atvartas */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            border-top: 130px solid #e5d5c1;
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Voko vidus (šonai) */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 3;
+            width: 0;
+            height: 0;
+            border-top: 115px solid transparent;
+            border-bottom: 115px solid transparent;
+            border-left: 175px solid #efdfca;
+            border-right: 175px solid #efdfca;
+            bottom: 0;
+        }
+
+        /* KVIETIMO POPIERIUS */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 180px;
+            background: var(--paper-bg);
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: all 0.8s ease-in-out;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* ANIMACIJA ATIDARIUS */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            bottom: 100px;
+            height: 420px;
+            width: 320px;
+            z-index: 5;
+            padding-top: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        /* TURINYS */
+        .content { opacity: 0; transition: opacity 0.5s; }
+        .envelope-wrapper.open .content { opacity: 1; transition-delay: 0.4s; }
+
+        .names { font-family: 'Playfair Display', serif; font-size: 28px; margin: 0; font-weight: 700; }
+        .gold-text { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 10px; font-weight: 600; }
+        .divider { width: 40px; height: 1px; background: var(--gold); margin: 15px auto; }
+        .info-row { font-size: 14px; margin: 10px 0; }
+        
+        .hint {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: var(--gold);
+            font-size: 12px;
+            letter-spacing: 1px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-blob" style="top: -100px; left: -100px;"></div>
-    <div class="bg-blob" style="bottom: -100px; right: -100px;"></div>
+    <div class="envelope-wrapper" id="invitation">
+        <div class="envelope"></div>
+        <div class="letter">
+            <div class="content">
+                <span class="gold-text">Kvietimas</span>
+                <div class="names">Mice & Cigoncius</div>
+                <div class="divider"></div>
+                <p style="font-style: italic; font-size: 14px;">Mes tuokiamės!</p>
+                
+                <div style="margin-top: 30px;">
+                    <div class="info-row"><strong>DATA:</strong> 2026 m. vasario 24 d.</div>
+                    <div class="info-row"><strong>LAIKAS:</strong> 16:00 val.</div>
+                    <div class="info-row"><strong>VIETA:</strong> Viršuliškių bažnyčia</div>
+                </div>
 
-    <div class="card">
-        <span class="invite-label">Maloniai kviečiame</span>
-        <div class="names">
-            Mice
-            <span class="ampersand">&amp;</span>
-            Cigoncius
-        </div>
-        
-        <h1>Mes tuokiamės!</h1>
-        
-        <div class="divider"></div>
-        
-        <div class="info-grid">
-            <div class="info-item">
-                <h3>Data</h3>
-                <p>2026 m. vasario 24 d.</p>
-            </div>
-            <div class="info-item">
-                <h3>Laikas</h3>
-                <p>16:00 val.</p>
-            </div>
-            <div class="info-item">
-                <h3>Vieta</h3>
-                <p>Viršuliškių bažnyčia</p>
+                <div id="countdown" style="margin-top: 30px; font-size: 12px; color: #888;"></div>
+                <p style="margin-top: 40px; font-family: 'Playfair Display', serif;">Laukiame jūsų! ♡</p>
             </div>
         </div>
-
-        <div id="countdown">Kraunamas laikmatis...</div>
-
-        <button id="playBtn">PALEISTI ŠVENTĘ 🎶</button>
-        
-        <audio id="weddingAudio">
-            <source src="muzika.mp3" type="audio/mpeg">
-        </audio>
-
-        <footer>Su meile, jūsų būsimi šeimininkai ♡</footer>
+        <div class="hint">PASPAUSKITE, KAD ATIDARYTUMĖTE</div>
     </div>
 
-<script>
-    // Atgalinis laikmatis
-    const weddingDate = new Date("Feb 24, 2026 16:00:00").getTime();
+    <audio id="weddingAudio">
+        <source src="muzika.mp3" type="audio/mpeg">
+    </audio>
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const diff = weddingDate - now;
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-        document.getElementById("countdown").innerHTML = 
-            `Liko: ${days} d. ir ${hours} val.`;
-    }
-    
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-
-    // Muzika ir Konfeti
-    document.getElementById('playBtn').addEventListener('click', function(){
+    <script>
+        const wrapper = document.getElementById('invitation');
         const audio = document.getElementById('weddingAudio');
-        audio.play();
-        
-        // Konfeti efektas
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#c9a56a', '#ffffff', '#f2d1a4']
+        let isOpen = false;
+
+        wrapper.addEventListener('click', function() {
+            if (!isOpen) {
+                this.classList.add('open');
+                this.querySelector('.hint').style.display = 'none';
+                
+                // Paleidžiam muziką
+                audio.play().catch(e => console.log("Audio play blocked"));
+
+                // Fejerverkų/Konfeti efektas
+                var duration = 5 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                function randomInRange(min, max) {
+                  return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                  var timeLeft = animationEnd - Date.now();
+
+                  if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                  }
+
+                  var particleCount = 50 * (timeLeft / duration);
+                  confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                  confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+
+                isOpen = true;
+            }
         });
 
-        this.innerHTML = "GROJA...";
-        this.style.opacity = "0.5";
-        this.disabled = true;
-    });
-</script>
-
+        // Laikmatis
+        function updateTimer() {
+            const target = new Date("Feb 24, 2026 16:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("countdown").innerHTML = `Liko: ${days} dienų`;
+        }
+        updateTimer();
+    </script>
 </body>
 </html>
